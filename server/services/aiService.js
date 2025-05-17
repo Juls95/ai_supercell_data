@@ -13,8 +13,8 @@ const XAI_API_KEY = process.env.XAI_API_KEY;
 export async function analyzeRedditPosts(posts) {
   try {
     if (!XAI_API_KEY) {
-      console.error('X.AI API key is missing');
-      return null;
+      console.log('X.AI API key is missing, using local analysis');
+      return generateGrokStyleAnalysis(posts);
     }
 
     // Prepare the content for analysis
@@ -55,7 +55,8 @@ URL: ${post.url}
     if (error.response?.data?.error) {
       console.error('Grok API error details:', error.response.data.error);
     }
-    return null;
+    console.log('Falling back to local analysis');
+    return generateGrokStyleAnalysis(posts);
   }
 }
 

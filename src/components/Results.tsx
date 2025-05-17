@@ -53,6 +53,58 @@ const YouTubeVideoCard = ({ video }: { video: SearchResult['youtubeVideos'][0] }
   </motion.div>
 );
 
+const AIAnalysisSection = ({ analysis }: { analysis: string }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    className="mb-8 p-8 bg-[#1E2A59]/90 rounded-2xl shadow-lg border-2 border-[#3A4B80]"
+  >
+    <h2 className="text-2xl font-bold mb-6 text-[#F5793B] flex items-center">
+      <span className="mr-2">🤖</span> AI Strategy Analysis
+    </h2>
+    <div className="prose prose-invert max-w-none space-y-6">
+      {analysis.split('\n').map((line, index) => {
+        // Introduction section
+        if (line.includes("let's break down") || line.includes("Here's the summary")) {
+          return <p key={index} className="text-gray-300 italic text-lg">{line}</p>;
+        }
+        
+        // Section headers (numbered points)
+        if (line.match(/^\d+\.\s+\*\*.*\*\*/)) {
+          return (
+            <h3 key={index} className="text-xl font-bold text-[#F5793B] mt-6 mb-3">
+              {line.replace(/\*\*/g, '')}
+            </h3>
+          );
+        }
+        
+        // Bold text within paragraphs
+        if (line.includes('**')) {
+          const parts = line.split(/(\*\*.*?\*\*)/g);
+          return (
+            <p key={index} className="text-gray-300 leading-relaxed">
+              {parts.map((part, i) => {
+                if (part.startsWith('**') && part.endsWith('**')) {
+                  return <strong key={i} className="text-[#F5793B]">{part.slice(2, -2)}</strong>;
+                }
+                return part;
+              })}
+            </p>
+          );
+        }
+        
+        // Regular paragraphs
+        if (line.trim() && !line.startsWith('*')) {
+          return <p key={index} className="text-gray-300 leading-relaxed">{line}</p>;
+        }
+        
+        // Skip empty lines
+        return null;
+      })}
+    </div>
+  </motion.div>
+);
+
 export const Results: React.FC<ResultsProps> = ({ results, isLoading }) => {
   if (isLoading) {
     return (
@@ -63,19 +115,7 @@ export const Results: React.FC<ResultsProps> = ({ results, isLoading }) => {
   }
 
   if (!results) {
-    return (
-      <div className="text-center p-8">
-        <img 
-          src={defaultImage}
-          alt="Clash of Clans Troops"
-          className="mx-auto rounded-2xl shadow-lg max-w-md w-full object-cover h-64 mb-6"
-          loading="lazy"
-        />
-        <p className="text-xl text-gray-300">
-          Enter your question above to find strategies
-        </p>
-      </div>
-    );
+    return null;
   }
 
   if (results.redditPosts.length === 0 && results.youtubeVideos.length === 0) {
@@ -102,16 +142,7 @@ export const Results: React.FC<ResultsProps> = ({ results, isLoading }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {results.aiAnalysis && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8 p-8 bg-[#1E2A59]/90 rounded-2xl shadow-lg border-2 border-[#3A4B80]"
-        >
-          <h2 className="text-2xl font-bold mb-4 text-[#F5793B]">AI Analysis</h2>
-          <p className="text-gray-300 whitespace-pre-line">{results.aiAnalysis}</p>
-        </motion.div>
-      )}
+      {results.aiAnalysis && <AIAnalysisSection analysis={results.aiAnalysis} />}
 
       <div className="bg-[#1E2A59]/90 p-8 rounded-2xl shadow-lg border-2 border-[#3A4B80]">
         <h2 className="text-2xl font-bold mb-8 text-[#F5793B]">Strategy Results</h2>

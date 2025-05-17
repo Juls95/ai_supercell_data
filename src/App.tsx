@@ -3,6 +3,7 @@ import { SearchBar } from './components/SearchBar';
 import { Results } from './components/Results';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { ClinderImage } from './components/ClinderImage';
 import { SearchResult } from './types';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         <div className="max-w-7xl mx-auto">
           <Header />
           <SearchBar onSearch={handleSearch} />
+          <ClinderImage show={!results && !isLoading} />
           <div className="mt-8">
             <Results results={results} isLoading={isLoading} />
           </div>
