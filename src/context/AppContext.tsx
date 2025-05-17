@@ -13,17 +13,17 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-export const useAppContext = (): AppContextType => {
+interface AppProviderProps {
+  children: ReactNode;
+}
+
+export const useAppContext = () => {
   const context = useContext(AppContext);
   if (!context) {
     throw new Error('useAppContext must be used within an AppProvider');
   }
   return context;
 };
-
-interface AppProviderProps {
-  children: ReactNode;
-}
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [redditResults, setRedditResults] = useState<RedditPost[]>([]);
@@ -37,8 +37,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setError(null);
     
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
-      const response = await axios.get(`${apiUrl}/search`, {
+      // Use relative URL for API calls
+      const response = await axios.get('/api/search', {
         params: { query },
         timeout: 10000 // 10 second timeout
       });
