@@ -1,12 +1,40 @@
-import React from 'react';
-import { SearchLayout } from './layouts/SearchLayout';
-import { AppProvider } from './context/AppContext';
+import React, { useState } from 'react';
+import { SearchBar } from './components/SearchBar';
+import { Results } from './components/Results';
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
+import { SearchResult } from './types';
 
 function App() {
+  const [results, setResults] = useState<SearchResult | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSearch = async (query: string) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`http://localhost:3001/api/search?query=${encodeURIComponent(query)}`);
+      const data = await response.json();
+      setResults(data);
+    } catch (error) {
+      console.error('Search error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <AppProvider>
-      <SearchLayout />
-    </AppProvider>
+    <div className="min-h-screen bg-[#0F172A] flex flex-col">
+      <div className="flex-grow py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <Header />
+          <SearchBar onSearch={handleSearch} />
+          <div className="mt-8">
+            <Results results={results} isLoading={isLoading} />
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
   );
 }
 

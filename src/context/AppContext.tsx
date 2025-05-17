@@ -5,6 +5,7 @@ import { RedditPost, YouTubeVideo } from '../types';
 interface AppContextType {
   redditResults: RedditPost[];
   youtubeResults: YouTubeVideo[];
+  aiAnalysis: string | null;
   isLoading: boolean;
   hasSearched: boolean;
   error: string | null;
@@ -28,6 +29,7 @@ export const useAppContext = () => {
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [redditResults, setRedditResults] = useState<RedditPost[]>([]);
   const [youtubeResults, setYoutubeResults] = useState<YouTubeVideo[]>([]);
+  const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -49,6 +51,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
       setRedditResults(response.data.redditPosts || []);
       setYoutubeResults(response.data.youtubeVideos || []);
+      setAiAnalysis(response.data.aiAnalysis || null);
       setHasSearched(true);
     } catch (err) {
       console.error('Search error:', err);
@@ -69,6 +72,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       setError(errorMessage);
       setRedditResults([]);
       setYoutubeResults([]);
+      setAiAnalysis(null);
     } finally {
       setIsLoading(false);
     }
@@ -77,6 +81,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const value = {
     redditResults,
     youtubeResults,
+    aiAnalysis,
     isLoading,
     hasSearched,
     error,

@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { searchReddit } from './services/redditService.js';
 import { searchYouTube } from './services/youtubeService.js';
+import { analyzeRedditPosts } from './services/aiService.js';
 
 // Load environment variables
 dotenv.config();
@@ -10,7 +11,7 @@ dotenv.config();
 const app = express();
 
 // Validate required environment variables
-const requiredEnvVars = ['REDDIT_CLIENT_ID', 'REDDIT_CLIENT_SECRET', 'YOUTUBE_API_KEY'];
+const requiredEnvVars = ['REDDIT_CLIENT_ID', 'REDDIT_CLIENT_SECRET', 'YOUTUBE_API_KEY', 'XAI_API_KEY'];
 const missingEnvVars = requiredEnvVars.filter(varName => !process.env[varName]);
 
 if (missingEnvVars.length > 0) {
@@ -37,9 +38,13 @@ app.get('/api/search', async (req, res) => {
       searchYouTube(query)
     ]);
 
+    // Get AI analysis of Reddit posts
+    const aiAnalysis = await analyzeRedditPosts(redditPosts);
+
     res.json({
       redditPosts,
-      youtubeVideos
+      youtubeVideos,
+      aiAnalysis
     });
   } catch (error) {
     console.error('Search API error:', error);
