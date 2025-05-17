@@ -14,7 +14,7 @@ export const Footer: React.FC = () => {
           {/* Social Links */}
           <div className="flex justify-center space-x-6">
             <a
-              href="https://github.com/yourusername/clash-strategy-finder"
+              href="https://github.com/Juls95/ai_supercell_data"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-[#F5793B] transition-colors"
@@ -22,7 +22,7 @@ export const Footer: React.FC = () => {
               <Github size={24} />
             </a>
             <a
-              href="https://twitter.com/yourusername"
+              href="https://twitter.com/julsr_mx"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-[#F5793B] transition-colors"
@@ -35,12 +35,12 @@ export const Footer: React.FC = () => {
           <p className="text-sm text-gray-400">
             Made with ❤️ from LATAM by{' '}
             <a
-              href="https://github.com/yourusername"
+              href="https://github.com/juls95"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#F5793B] hover:text-[#F5793B]/80 transition-colors"
             >
-              julian
+              Juls
             </a>
           </p>
         </div>
