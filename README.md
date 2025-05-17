@@ -1,7 +1,7 @@
 # Clinder - Clash Strategy Finder 🏰
 
 <div align="center">
-  <img src="src/assets/images/clinder_coc.png" alt="Clinder Logo" width="400"/>
+  <img src="src/assets/images/clinder_image.png" alt="Clinder Logo" width="400"/>
 </div>
 
 ## About
@@ -38,7 +38,7 @@ Clinder is an AI-powered strategy finder for Clash of Clans that helps players d
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/clinder.git
+git clone https://github.com/Juls95/ai_supercell_data
 cd clinder
 ```
 
