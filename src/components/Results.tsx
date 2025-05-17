@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { motion } from 'framer-motion';
 import { AlertCircle, WifiOff, Clock, Search } from 'lucide-react';
 import { SearchResult } from '../types';
@@ -8,6 +8,50 @@ interface ResultsProps {
   results: SearchResult | null;
   isLoading: boolean;
 }
+
+const LoadingSpinner = () => (
+  <div className="flex justify-center items-center p-4">
+    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#F5793B]"></div>
+  </div>
+);
+
+const YouTubeVideoCard = ({ video }: { video: SearchResult['youtubeVideos'][0] }) => (
+  <motion.div
+    initial={{ opacity: 0, x: 20 }}
+    animate={{ opacity: 1, x: 0 }}
+    className="bg-[#2A3655] rounded-lg overflow-hidden hover:bg-[#2A3655]/80 transition-colors"
+  >
+    <a
+      href={`https://www.youtube.com/watch?v=${video.id}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block"
+    >
+      <div className="relative">
+        <img
+          src={video.thumbnail}
+          alt={video.title}
+          className="w-full aspect-video object-cover"
+          loading="lazy"
+        />
+        <div className="absolute bottom-0 right-0 bg-black bg-opacity-75 text-white px-2 py-1 text-sm">
+          {video.duration}
+        </div>
+      </div>
+      <div className="p-4">
+        <h4 className="font-semibold text-white line-clamp-2 mb-2">{video.title}</h4>
+        <p className="text-sm text-gray-300 line-clamp-2 mb-2">{video.description}</p>
+        <div className="flex items-center justify-between text-sm text-gray-400">
+          <span>{video.channelTitle}</span>
+          <div className="flex items-center space-x-2">
+            <span>👁️ {video.viewCount.toLocaleString()}</span>
+            <span>👍 {video.likeCount.toLocaleString()}</span>
+          </div>
+        </div>
+      </div>
+    </a>
+  </motion.div>
+);
 
 export const Results: React.FC<ResultsProps> = ({ results, isLoading }) => {
   if (isLoading) {
@@ -25,6 +69,7 @@ export const Results: React.FC<ResultsProps> = ({ results, isLoading }) => {
           src={defaultImage}
           alt="Clash of Clans Troops"
           className="mx-auto rounded-2xl shadow-lg max-w-md w-full object-cover h-64 mb-6"
+          loading="lazy"
         />
         <p className="text-xl text-gray-300">
           Enter your question above to find strategies
@@ -110,43 +155,11 @@ export const Results: React.FC<ResultsProps> = ({ results, isLoading }) => {
           <div>
             <h3 className="text-xl font-semibold mb-4 text-[#F5793B]">YouTube Videos</h3>
             <div className="space-y-4">
-              {results.youtubeVideos.map((video) => (
-                <motion.div
-                  key={video.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="bg-[#2A3655] rounded-lg overflow-hidden hover:bg-[#2A3655]/80 transition-colors"
-                >
-                  <a
-                    href={`https://www.youtube.com/watch?v=${video.id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block"
-                  >
-                    <div className="relative">
-                      <img
-                        src={video.thumbnail}
-                        alt={video.title}
-                        className="w-full aspect-video object-cover"
-                      />
-                      <div className="absolute bottom-0 right-0 bg-black bg-opacity-75 text-white px-2 py-1 text-sm">
-                        {video.duration}
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <h4 className="font-semibold text-white line-clamp-2 mb-2">{video.title}</h4>
-                      <p className="text-sm text-gray-300 line-clamp-2 mb-2">{video.description}</p>
-                      <div className="flex items-center justify-between text-sm text-gray-400">
-                        <span>{video.channelTitle}</span>
-                        <div className="flex items-center space-x-2">
-                          <span>👁️ {video.viewCount.toLocaleString()}</span>
-                          <span>👍 {video.likeCount.toLocaleString()}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                </motion.div>
-              ))}
+              <Suspense fallback={<LoadingSpinner />}>
+                {results.youtubeVideos.map((video) => (
+                  <YouTubeVideoCard key={video.id} video={video} />
+                ))}
+              </Suspense>
             </div>
           </div>
         </div>
