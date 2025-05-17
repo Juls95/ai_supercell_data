@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#0A174E] text-white;
+  }
+}
+
+.hero-pattern {
+  background-image: url('https://images.pexels.com/photos/7130555/pexels-photo-7130555.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.glass-effect {
+  backdrop-filter: blur(8px);
+  background-color: rgba(30, 42, 89, 0.8);
+}
