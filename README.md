@@ -74,7 +74,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License  
 
 ## Acknowledgments
 
@@ -84,6 +84,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-Julian - [@your_twitter](https://twitter.com/your_twitter)
+Julian - [@julsr_mx](https://twitter.com/julsr_mx)
 
-Project Link: [https://github.com/yourusername/clinder](https://github.com/yourusername/clinder) 
+Project Link: [https://github.com/Juls95/ai_supercell_data](https://github.com/Juls95/ai_supercell_data) 
