@@ -8,7 +8,6 @@ import { searchYouTube } from './services/youtubeService.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
 
 // Validate required environment variables
 const requiredEnvVars = ['REDDIT_CLIENT_ID', 'REDDIT_CLIENT_SECRET', 'YOUTUBE_API_KEY'];
@@ -56,7 +55,13 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+// Export for Vercel
+export default app;
